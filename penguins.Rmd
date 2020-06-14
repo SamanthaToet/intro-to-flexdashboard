@@ -1,0 +1,145 @@
+---
+title: "Penguins"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: [ "twitter"]
+    source_code: https://github.com/SamanthaToet/intro-to-flexdashboard
+date: "`r Sys.Date()`"
+runtime: shiny
+
+---
+
+
+<style>
+.navbar {
+  background-color: #15dcb2ff;
+  border-color: #15dcb2ff
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+    background-color: #c35dca;
+    color: white;
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: white;
+  background-color: #c35dca;
+}
+.navbar-inverse .navbar-toggle:hover,
+.navbar-inverse .navbar-toggle:focus {
+  background-color: #c35dca;
+}
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .navbar-form {
+  border-color: #c35dca;
+}
+</style>
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(knitr)
+library(palmerpenguins)
+library(shiny)
+library(tidyverse)
+
+penguins <- palmerpenguins::penguins
+
+```
+
+Analysis
+=====================================   
+
+Row
+-------------------------------------
+
+### Penguins measured
+
+```{r n_penguins}
+n_penguins <- nrow(penguins)
+valueBox(n_penguins, icon = "fa-pencil", color = "#fa7404")
+```
+
+### Average culmen length
+
+```{r cul_length}
+cul_length <- paste0(round(mean(penguins$culmen_length_mm, na.rm = TRUE)), " mm")
+valueBox(cul_length, icon = "fa-ruler", color = "#fa7404")
+```
+
+### Average body mass
+
+```{r mass}
+mass <- round(mean(penguins$body_mass_g, na.rm = TRUE))
+
+gauge(mass, min = min(penguins$body_mass_g, na.rm = TRUE), 
+      max = max(penguins$body_mass_g, na.rm = TRUE), 
+      symbol = 'g', 
+      gaugeSectors(
+        success = c(6000, 6300), warning = c(3000, 5999), danger = c(2700, 2999)),
+      abbreviate = FALSE
+)
+```
+
+Row
+-------------------------------------
+
+### Culmen Length vs. Body Mass
+
+```{r plot, echo = FALSE}
+
+mass_culmen <- ggplot(data = penguins, 
+                       aes(x = culmen_length_mm,
+                           y = body_mass_g)) +
+  geom_point(aes(color = species),
+             size = 3,
+             alpha = 0.8) +
+  theme_minimal() +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(x = "Culmen length (mm)",
+       y = "Body mass (g)",
+       color = "Penguin species") 
+
+mass_culmen
+```
+   
+### What are we measuring? {.tabset}
+
+```{r}
+include_graphics("culmen_depth.png")
+```   
+    
+
+Raw Data
+=====================================   
+
+Row 
+-------------------------------------
+
+```{r table}
+DT::datatable(penguins, options = list(
+  pageLength = 25, 
+  height = "600px"
+))
+```
+
+Row {data-height=100}
+-------------------------------------
+
+
+```{r download}
+fluidRow(
+  downloadHandler(filename = function() { 
+    return("penguins.csv")
+
+ }, content = function(file) {
+   write.csv(penguins, file)
+ }),
+  
+)
+
+
+```
+
