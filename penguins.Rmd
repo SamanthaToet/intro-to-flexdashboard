@@ -115,7 +115,7 @@ include_graphics("culmen_depth.png")
 Raw Data
 =====================================   
 
-Row 
+Row
 -------------------------------------
 
 ```{r table}
