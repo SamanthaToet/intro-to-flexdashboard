@@ -7,9 +7,7 @@ output:
     source_code: https://github.com/SamanthaToet/intro-to-flexdashboard
 date: "`r Sys.Date()`"
 runtime: shiny
-
 ---
-
 
 <style>
 .navbar {
@@ -65,8 +63,10 @@ valueBox(n_penguins, icon = "fa-pencil", color = "#fa7404")
 ### Average culmen length
 
 ```{r cul_length}
-cul_length <- paste0(round(mean(penguins$culmen_length_mm, na.rm = TRUE)), " mm")
-valueBox(cul_length, icon = "fa-ruler", color = "#fa7404")
+cul_length <- paste0(round(mean(penguins$culmen_length_mm, 
+                                na.rm = TRUE)), " mm")
+valueBox(cul_length, 
+         icon = "fa-ruler", color = "#fa7404")
 ```
 
 ### Average body mass
@@ -78,7 +78,9 @@ gauge(mass, min = min(penguins$body_mass_g, na.rm = TRUE),
       max = max(penguins$body_mass_g, na.rm = TRUE), 
       symbol = 'g', 
       gaugeSectors(
-        success = c(6000, 6300), warning = c(3000, 5999), danger = c(2700, 2999)),
+        success = c(6000, 6300), 
+        warning = c(3000, 5999), 
+        danger = c(2700, 2999)),
       abbreviate = FALSE
 )
 ```
@@ -90,28 +92,22 @@ Row
 
 ```{r plot, echo = FALSE}
 
-mass_culmen <- ggplot(data = penguins, 
-                       aes(x = culmen_length_mm,
-                           y = body_mass_g)) +
-  geom_point(aes(color = species),
-             size = 3,
-             alpha = 0.8) +
+ggplot(penguins, aes(culmen_length_mm, body_mass_g)) +
+  geom_point(aes(color = species), size = 3, alpha = 0.8) +
   theme_minimal() +
   scale_color_manual(values = c("darkorange","purple","cyan4")) +
   labs(x = "Culmen length (mm)",
        y = "Body mass (g)",
        color = "Penguin species") 
 
-mass_culmen
 ```
    
-### What are we measuring? {.tabset}
+### What are we measuring?
 
-```{r}
-include_graphics("culmen_depth.png")
+```{r image}
+knitr::include_graphics("culmen_depth.png")
 ```   
     
-
 Raw Data
 =====================================   
 
@@ -128,18 +124,14 @@ DT::datatable(penguins, options = list(
 Row {data-height=100}
 -------------------------------------
 
-
 ```{r download}
+
 fluidRow(
   downloadHandler(filename = function() { 
     return("penguins.csv")
 
  }, content = function(file) {
    write.csv(penguins, file)
- }),
-  
+ })
 )
-
-
 ```
-
