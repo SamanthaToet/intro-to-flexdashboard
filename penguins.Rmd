@@ -63,7 +63,7 @@ valueBox(n_penguins, icon = "fa-pencil", color = "#fa7404")
 ### Average culmen length
 
 ```{r cul_length}
-cul_length <- paste0(round(mean(penguins$culmen_length_mm, 
+cul_length <- paste0(round(mean(penguins$bill_length_mm, 
                                 na.rm = TRUE)), " mm")
 valueBox(cul_length, 
          icon = "fa-ruler", color = "#fa7404")
@@ -92,7 +92,7 @@ Row
 
 ```{r plot, echo = FALSE}
 
-ggplot(penguins, aes(culmen_length_mm, body_mass_g)) +
+ggplot(penguins, aes(bill_length_mm, body_mass_g)) +
   geom_point(aes(color = species), size = 3, alpha = 0.8) +
   theme_minimal() +
   scale_color_manual(values = c("darkorange","purple","cyan4")) +
@@ -114,6 +114,8 @@ Raw Data
 Row
 -------------------------------------
 
+### Data Table of Raw Data
+
 ```{r table}
 DT::datatable(penguins, options = list(
   pageLength = 25, 
@@ -125,7 +127,6 @@ Row {data-height=100}
 -------------------------------------
 
 ```{r download}
-
 fluidRow(
   downloadHandler(filename = function() { 
     return("penguins.csv")
