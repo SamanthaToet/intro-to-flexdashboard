@@ -1,2 +1,2 @@
 # intro-to-flexdashboard
-Sample dashboard for RLadies Cville Meetup 
+Slides and sample dashboard for RLadies Cville Meetup 
